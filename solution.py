@@ -1,16 +1,22 @@
-import pandas as pd
 import numpy as np
-from scipy.stats import ks_2samp
+from scipy.stats import ttest_ind
+
+chat_id = 973327975  # Ваш chat ID, не меняйте название переменной
 
 
-chat_id = 973327975 # Ваш chat ID, не меняйте название переменной
-
-def solution(x: np.array, y: np.array) -> bool:
+def solution(x: np.array, y: np.array) -> bool:  # Одна или две выборке на входе, заполняется исходя из условия
     # Измените код этой функции
     # Это будет вашим решением
-    # Не меняйте название функции и её аргументы
-    # применяем тест Колмогорова-Смирнова к выборкам x и y
-    test_result = ks_2samp(x, y)
+    # Не меняйте название функции и её аргумент
+    # проверяем, что выборки не пустые
+    if len(x) == 0 or len(y) == 0:
+        return False
 
-    # сравниваем p-value с уровнем значимости
-    return test_result.pvalue < 0.04
+    # используем t-критерий Стьюдента для проверки гипотезы однородности выборок
+    p_value = ttest_ind(x, y)[1]
+
+    # если p-value меньше уровня значимости, то отклоняем гипотезу
+    if p_value < 0.04:
+        return True
+    else:
+        return False
